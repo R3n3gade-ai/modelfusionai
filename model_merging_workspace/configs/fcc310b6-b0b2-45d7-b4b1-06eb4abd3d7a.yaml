@@ -1,0 +1,9 @@
+dtype: float16
+merge_method: linear
+models:
+- model: model_merging_workspace\models_cache\microsoft_DialoGPT-small
+  parameters:
+    weight: 0.5
+- model: model_merging_workspace\models_cache\microsoft_DialoGPT-medium
+  parameters:
+    weight: 0.5
