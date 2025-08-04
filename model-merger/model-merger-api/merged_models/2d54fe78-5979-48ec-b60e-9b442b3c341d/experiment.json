@@ -1,0 +1,24 @@
+{
+  "experiment_id": "2d54fe78-5979-48ec-b60e-9b442b3c341d",
+  "name": "test",
+  "method": "linear",
+  "models": [
+    {
+      "id": "gpt2-small",
+      "name": "GPT-2 Small (124M)",
+      "weight": 1
+    },
+    {
+      "id": "distilgpt2",
+      "name": "DistilGPT-2 (82M)",
+      "weight": 1
+    }
+  ],
+  "weights": [
+    1,
+    1
+  ],
+  "parameters": {},
+  "created_at": "2025-06-22T20:31:36.442482",
+  "completed_at": "2025-06-22T20:34:47.963629"
+}

@@ -1,0 +1,44 @@
+{
+  "2f09c860-d9cb-42c8-b971-8e2350ec4357": {
+    "id": "2f09c860-d9cb-42c8-b971-8e2350ec4357",
+    "name": "My Custom Model",
+    "method": "linear",
+    "models": [
+      {
+        "id": "gpt2-small",
+        "weight": 0.5
+      },
+      {
+        "id": "distilgpt2",
+        "weight": 0.5
+      }
+    ],
+    "status": "completed",
+    "progress": 100,
+    "created_at": "2025-07-01T20:15:13.967972",
+    "current_step": "Merge completed successfully!",
+    "estimated_time_remaining": "Complete",
+    "output_path": "merged_models\\2f09c860-d9cb-42c8-b971-8e2350ec4357"
+  },
+  "90ab8dfe-2e74-498c-afce-0e22fde97097": {
+    "id": "90ab8dfe-2e74-498c-afce-0e22fde97097",
+    "name": "My Custom Model",
+    "method": "linear",
+    "models": [
+      {
+        "id": "distilgpt2",
+        "weight": 0.5
+      },
+      {
+        "id": "gpt2-small",
+        "weight": 0.5
+      }
+    ],
+    "status": "completed",
+    "progress": 100,
+    "created_at": "2025-07-01T20:26:18.335957",
+    "current_step": "Merge completed successfully!",
+    "estimated_time_remaining": "Complete",
+    "output_path": "merged_models\\90ab8dfe-2e74-498c-afce-0e22fde97097"
+  }
+}

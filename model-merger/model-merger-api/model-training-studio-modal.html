@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Training Studio</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        /* Main Container */
+        .model-training-studio {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #0a0a0a;
+        }
+
+        /* Header */
+        .studio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .studio-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .studio-title i {
+            color: #14b8a6;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .guide-btn {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .guide-btn:hover {
+            background: #334155;
+            color: #ffffff;
+        }
+
+        .close-btn {
+            background: #dc2626;
+            border: none;
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* Main Content */
+        .studio-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Left Panel - Model Library */
+        .model-library {
+            width: 300px;
+            background: #1e293b;
+            border-right: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #334155;
+            background: #0f172a;
+        }
+
+        .panel-title {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title i {
+            color: #14b8a6;
+        }
+
+        .architecture-select {
+            width: 100%;
+            background: #334155;
+            border: 1px solid #475569;
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .search-container {
+            position: relative;
+            margin-top: 12px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: #334155;
+            border: 1px solid #475569;
+            color: #ffffff;
+            padding: 8px 12px 8px 36px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .model-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .model-card {
+            background: #334155;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .model-card:hover {
+            border-color: #14b8a6;
+            box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.1);
+        }
+
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .model-name {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .model-size {
+            background: #14b8a6;
+            color: #ffffff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .model-description {
+            color: #cbd5e1;
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .model-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .model-tags {
+            display: flex;
+            gap: 4px;
+        }
+
+        .model-tag {
+            background: #475569;
+            color: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        .add-to-merge-btn {
+            background: #14b8a6;
+            border: none;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .add-to-merge-btn:hover {
+            background: #0d9488;
+        }
+
+        .add-to-merge-btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+
+        /* Center Panel - Merge Configuration */
+        .merge-configuration {
+            flex: 1;
+            background: #1e293b;
+            border-right: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .config-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            color: #f1f5f9;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            background: #334155;
+            border: 1px solid #475569;
+            color: #ffffff;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #14b8a6;
+            box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            background: #334155;
+            border: 1px solid #475569;
+            color: #ffffff;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .method-description {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .selected-models-container {
+            background: #334155;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            min-height: 120px;
+            padding: 12px;
+        }
+
+        .selected-models-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .models-count {
+            background: #14b8a6;
+            color: #ffffff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .selected-model-item {
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .selected-model-name {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .remove-model-btn {
+            background: #dc2626;
+            border: none;
+            color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .remove-model-btn:hover {
+            background: #b91c1c;
+        }
+
+        .empty-selection {
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+            padding: 20px;
+        }
+
+        .empty-selection i {
+            font-size: 24px;
+            color: #475569;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .start-merge-btn {
+            flex: 1;
+            background: #14b8a6;
+            border: none;
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .start-merge-btn:hover:not(:disabled) {
+            background: #0d9488;
+        }
+
+        .start-merge-btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+
+        .preview-btn {
+            background: #6366f1;
+            border: none;
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .preview-btn:hover {
+            background: #4f46e5;
+        }
+
+        /* Right Panel - Experiments */
+        .experiments {
+            width: 320px;
+            background: #1e293b;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .experiments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .status-indicators {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-running .status-dot {
+            background: #10b981;
+        }
+
+        .status-completed .status-dot {
+            background: #6b7280;
+        }
+
+        .experiments-content {
+            flex: 1;
+            padding: 16px 20px;
+            overflow-y: auto;
+        }
+
+        .experiment-item {
+            background: #334155;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .experiment-item:hover {
+            border-color: #14b8a6;
+        }
+
+        .experiment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .experiment-name {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .experiment-status {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-running {
+            background: #10b981;
+            color: #ffffff;
+        }
+
+        .status-completed {
+            background: #6b7280;
+            color: #ffffff;
+        }
+
+        .experiment-details {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-bottom: 12px;
+        }
+
+        .progress-container {
+            margin-bottom: 12px;
+        }
+
+        .progress-bar-container {
+            background: #475569;
+            border-radius: 4px;
+            height: 6px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: #10b981;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .experiment-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: #475569;
+            border: none;
+            color: #e2e8f0;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #64748b;
+        }
+
+        .action-btn.download {
+            background: #14b8a6;
+            color: #ffffff;
+        }
+
+        .action-btn.download:hover {
+            background: #0d9488;
+        }
+
+        .no-experiments {
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 60px;
+        }
+
+        .no-experiments i {
+            font-size: 32px;
+            color: #475569;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* Scrollbar styling */
+        .model-list::-webkit-scrollbar,
+        .experiments-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .model-list::-webkit-scrollbar-track,
+        .experiments-content::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        .model-list::-webkit-scrollbar-thumb,
+        .experiments-content::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+
+        .model-list::-webkit-scrollbar-thumb:hover,
+        .experiments-content::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Model Training Studio -->
+    <div class="model-training-studio">
+        <!-- Header -->
+        <div class="studio-header">
+            <div class="header-left">
+                <div class="studio-title">
+                    <i class="fas fa-brain"></i>
+                    Model Training Studio
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="guide-btn">
+                    <i class="fas fa-book"></i> Merge Methods Guide
+                </button>
+                <button class="close-btn" onclick="closeModelTrainingStudio()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="studio-content">
+            <!-- Left Panel - Model Library -->
+            <div class="model-library">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fas fa-database"></i>
+                        Model Library
+                    </div>
+                    <select class="architecture-select" id="architectureSelect">
+                        <option value="all">All Architectures</option>
+                        <option value="mistral">Mistral</option>
+                        <option value="llama">Llama</option>
+                        <option value="gpt">GPT</option>
+                    </select>
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search models..." id="searchInput">
+                    </div>
+                </div>
+                <div class="model-list" id="modelList">
+                    <!-- Models will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Center Panel - Merge Configuration -->
+            <div class="merge-configuration">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fas fa-cogs"></i>
+                        Merge Configuration
+                    </div>
+                </div>
+                <div class="config-content">
+                    <div class="form-section">
+                        <label class="form-label">Experiment Name:</label>
+                        <input type="text" class="form-input" id="experimentName" placeholder="My Custom Model" value="My Custom Model">
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">Merge Method:</label>
+                        <select class="form-select" id="mergeMethod">
+                            <option value="linear">Linear (Model Soup)</option>
+                            <option value="slerp">SLERP</option>
+                            <option value="ties">TIES</option>
+                            <option value="dare">DARE</option>
+                        </select>
+                        <div class="method-description" id="methodDescription">
+                            Simple averaging of model weights - good for general merging.
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">Selected Models:</label>
+                        <div class="selected-models-container">
+                            <div class="selected-models-header">
+                                <span>Models</span>
+                                <span class="models-count" id="modelsCount">0 models selected</span>
+                            </div>
+                            <div id="selectedModelsList">
+                                <div class="empty-selection">
+                                    <i class="fas fa-cube"></i>
+                                    Select models from the library to start merging
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="start-merge-btn" id="startMergeBtn" onclick="startModelMerge()" disabled>
+                            <i class="fas fa-play"></i> Start Merge
+                        </button>
+                        <button class="preview-btn" id="previewBtn">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Experiments -->
+            <div class="experiments">
+                <div class="panel-header">
+                    <div class="experiments-header">
+                        <div class="panel-title">
+                            <i class="fas fa-flask"></i>
+                            Experiments
+                        </div>
+                        <div class="status-indicators">
+                            <div class="status-indicator status-running">
+                                <div class="status-dot"></div>
+                                <span>Running</span>
+                            </div>
+                            <div class="status-indicator status-completed">
+                                <div class="status-dot"></div>
+                                <span>Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="experiments-content" id="experimentsList">
+                    <div class="no-experiments">
+                        <i class="fas fa-flask"></i>
+                        No running experiments<br>
+                        Start a merge to see progress here
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Model Training Studio Class
+        class ModelTrainingStudio {
+            constructor() {
+                this.selectedModels = [];
+                this.experiments = [];
+                this.apiBaseUrl = 'http://localhost:5007/api/model-merger';
+                this.models = [];
+
+                this.setupEventListeners();
+                this.loadModels();
+                this.loadExperiments();
+                this.updateMethodDescription();
+            }
+
+            setupEventListeners() {
+                // Architecture filter
+                const architectureSelect = document.getElementById('architectureSelect');
+                if (architectureSelect) {
+                    architectureSelect.addEventListener('change', (e) => {
+                        this.filterModelsByArchitecture(e.target.value);
+                    });
+                }
+
+                // Search functionality
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        this.searchModels(e.target.value);
+                    });
+                }
+
+                // Merge method change
+                const mergeMethodSelect = document.getElementById('mergeMethod');
+                if (mergeMethodSelect) {
+                    mergeMethodSelect.addEventListener('change', (e) => {
+                        this.updateMethodDescription();
+                    });
+                }
+            }
+
+            async loadModels() {
+                try {
+                    console.log('🔄 Loading models from API...');
+                    
+                    // Try to load from real API first
+                    const response = await fetch(`${this.apiBaseUrl}/models`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.models = data.models || [];
+                        console.log(`✅ Loaded ${this.models.length} models from API`);
+                    } else {
+                        throw new Error('API not available');
+                    }
+                } catch (error) {
+                    console.warn('⚠️ API not available, using fallback models:', error);
+                    // Fallback models that match the API format
+                    this.models = [
+                        {
+                            id: 'gpt2-small',
+                            name: 'GPT-2 Small',
+                            description: 'Small GPT-2 model for testing',
+                            download_size: '500MB',
+                            size: '500MB',
+                            type: 'gpt2',
+                            architecture: 'gpt2',
+                            tags: ['gpt2', 'small', 'text-generation']
+                        },
+                        {
+                            id: 'distilgpt2',
+                            name: 'DistilGPT2',
+                            description: 'Distilled version of GPT-2',
+                            download_size: '300MB',
+                            size: '300MB',
+                            type: 'gpt2',
+                            architecture: 'gpt2',
+                            tags: ['gpt2', 'distilled', 'efficient']
+                        },
+                        {
+                            id: 'gpt2-medium',
+                            name: 'GPT-2 Medium',
+                            description: 'Medium GPT-2 model',
+                            download_size: '1.5GB',
+                            size: '1.5GB',
+                            type: 'gpt2',
+                            architecture: 'gpt2',
+                            tags: ['gpt2', 'medium', 'text-generation']
+                        }
+                    ];
+                }
+                
+                this.renderModels(this.models);
+            }
+
+            renderModels(models) {
+                const container = document.getElementById('modelList');
+                if (!container) return;
+
+                container.innerHTML = models.map(model => `
+                    <div class="model-card" data-model-id="${model.id}">
+                        <div class="model-header">
+                            <div class="model-name">${model.name}</div>
+                            <div class="model-size">${model.size}</div>
+                        </div>
+                        <div class="model-description">${model.description}</div>
+                        <div class="model-footer">
+                            <div class="model-tags">
+                                ${model.tags.map(tag => `<span class="model-tag">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                        <button class="add-to-merge-btn" onclick="window.modelTrainingStudio.addToMerge('${model.id}')" 
+                                ${this.selectedModels.find(m => m.id === model.id) ? 'disabled' : ''}>
+                            ${this.selectedModels.find(m => m.id === model.id) ? 'Added' : 'Add to Merge'}
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            addToMerge(modelId) {
+                const model = this.models.find(m => m.id === modelId);
+                if (!model) return;
+
+                // Check if already selected
+                if (this.selectedModels.find(m => m.id === modelId)) {
+                    return;
+                }
+
+                this.selectedModels.push(model);
+                this.updateSelectedModelsList();
+                this.updateMergeButton();
+                this.renderModels(this.models); // Re-render to update button states
+            }
+
+            removeFromMerge(modelId) {
+                this.selectedModels = this.selectedModels.filter(m => m.id !== modelId);
+                this.updateSelectedModelsList();
+                this.updateMergeButton();
+                this.renderModels(this.models); // Re-render to update button states
+            }
+
+            updateSelectedModelsList() {
+                const container = document.getElementById('selectedModelsList');
+                const countElement = document.getElementById('modelsCount');
+                
+                if (!container || !countElement) return;
+
+                // Update count
+                countElement.textContent = `${this.selectedModels.length} models selected`;
+
+                if (this.selectedModels.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-selection">
+                            <i class="fas fa-cube"></i>
+                            Select models from the library to start merging
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = this.selectedModels.map(model => `
+                    <div class="selected-model-item">
+                        <div class="selected-model-name">${model.name}</div>
+                        <button class="remove-model-btn" onclick="window.modelTrainingStudio.removeFromMerge('${model.id}')">
+                            Remove
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            updateMergeButton() {
+                const startBtn = document.getElementById('startMergeBtn');
+                if (!startBtn) return;
+
+                if (this.selectedModels.length < 2) {
+                    startBtn.disabled = true;
+                    startBtn.innerHTML = '<i class="fas fa-play"></i> Select 2+ Models';
+                } else {
+                    startBtn.disabled = false;
+                    startBtn.innerHTML = '<i class="fas fa-play"></i> Start Merge';
+                }
+            }
+
+            updateMethodDescription() {
+                const methodSelect = document.getElementById('mergeMethod');
+                const descriptionElement = document.getElementById('methodDescription');
+                
+                if (!methodSelect || !descriptionElement) return;
+
+                const descriptions = {
+                    'linear': 'Simple averaging of model weights - good for general merging.',
+                    'slerp': 'Spherical Linear Interpolation - preserves model geometry.',
+                    'ties': 'Task Interference Elimination via Sparsification.',
+                    'dare': 'Drop And REscale - advanced merging with dropout.'
+                };
+
+                descriptionElement.textContent = descriptions[methodSelect.value] || '';
+            }
+
+            filterModelsByArchitecture(architecture) {
+                if (architecture === 'all') {
+                    this.renderModels(this.models);
+                } else {
+                    const filtered = this.models.filter(m => m.architecture === architecture);
+                    this.renderModels(filtered);
+                }
+            }
+
+            searchModels(query) {
+                if (!query.trim()) {
+                    this.renderModels(this.models);
+                    return;
+                }
+
+                const filtered = this.models.filter(model => 
+                    model.name.toLowerCase().includes(query.toLowerCase()) ||
+                    model.description.toLowerCase().includes(query.toLowerCase()) ||
+                    model.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
+                );
+                
+                this.renderModels(filtered);
+            }
+
+            async loadExperiments() {
+                try {
+                    // Load experiments from API
+                    const response = await fetch(`${this.apiBaseUrl}/experiments`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.experiments = data.experiments || [];
+                    } else {
+                        this.experiments = [];
+                    }
+                } catch (error) {
+                    console.warn('API not available, using mock experiments');
+                    // Mock experiment data when API is offline
+                    this.experiments = [
+                        {
+                            id: 'mock-exp-1',
+                            name: 'My Custom Model',
+                            status: 'completed',
+                            method: 'linear',
+                            progress: 100,
+                            models: [{name: 'GPT-2'}, {name: 'DistilGPT-2'}]
+                        },
+                        {
+                            id: 'mock-exp-2', 
+                            name: 'My Custom Model',
+                            status: 'completed',
+                            method: 'slerp',
+                            progress: 100,
+                            models: [{name: 'GPT-2'}, {name: 'Mistral-7B'}]
+                        }
+                    ];
+                }
+                
+                this.renderExperiments(this.experiments);
+            }
+
+            renderExperiments(experiments) {
+                const container = document.getElementById('experimentsList');
+                if (!container) return;
+
+                if (experiments.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-experiments">
+                            <i class="fas fa-flask"></i>
+                            No running experiments<br>
+                            Start a merge to see progress here
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = experiments.map(exp => `
+                    <div class="experiment-item">
+                        <div class="experiment-header">
+                            <div class="experiment-name">${exp.name}</div>
+                            <div class="experiment-status status-${exp.status}">${exp.status.toUpperCase()}</div>
+                        </div>
+                        <div class="experiment-details">
+                            Method: ${exp.method} • ${exp.models ? exp.models.length : 0} models
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: ${exp.progress || 0}%"></div>
+                            </div>
+                            <div class="progress-text">${exp.progress || 0}% complete</div>
+                        </div>
+                        <div class="experiment-actions">
+                            ${exp.status === 'completed' ? `<button class="action-btn download" onclick="window.modelTrainingStudio.downloadExperiment('${exp.id}')">Download</button>` : ''}
+                            <button class="action-btn" onclick="window.modelTrainingStudio.viewExperiment('${exp.id}')">View</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            async startModelMerge() {
+                const experimentName = document.getElementById('experimentName').value;
+                const mergeMethod = document.getElementById('mergeMethod').value;
+
+                if (this.selectedModels.length < 2) {
+                    alert('Please select at least 2 models to merge');
+                    return;
+                }
+
+                if (!experimentName.trim()) {
+                    alert('Please enter an experiment name');
+                    return;
+                }
+
+                try {
+                    console.log('🔄 Starting merge experiment...');
+                    // Call the API to create experiment
+                    const response = await fetch(`${this.apiBaseUrl}/experiments`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: experimentName,
+                            method: mergeMethod,
+                            models: this.selectedModels,
+                            parameters: {
+                                weights: this.selectedModels.map(() => 1.0),
+                                normalize: true,
+                                dtype: 'float16'
+                            }
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        console.log('✅ Experiment created:', result.experiment_id);
+                        alert(`Merge experiment created successfully! Experiment: ${experimentName}`);
+                        
+                        // Start polling for progress
+                        this.pollExperimentProgress(result.experiment_id);
+                        
+                        // Reload experiments to show the new one
+                        await this.loadExperiments();
+
+                        // Clear selections
+                        this.selectedModels = [];
+                        this.updateSelectedModelsList();
+                        this.updateMergeButton();
+                        this.renderModels(this.models);
+                    } else {
+                        console.error('❌ Error creating experiment:', result.error);
+                        alert(`Error starting merge: ${result.error}`);
+                    }
+                } catch (error) {
+                    console.error('❌ Error starting merge:', error);
+                    alert('Error starting merge. Please check if the backend is running.');
+                }
+            }
+
+            async pollExperimentProgress(experimentId) {
+                const pollInterval = setInterval(async () => {
+                    try {
+                        const response = await fetch(`${this.apiBaseUrl}/experiments/${experimentId}`);
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.success && data.experiment) {
+                                const exp = data.experiment;
+                                
+                                // Update local experiment
+                                const localExp = this.experiments.find(e => e.id === experimentId);
+                                if (localExp) {
+                                    localExp.status = exp.status;
+                                    localExp.progress = exp.progress || 0;
+                                    
+                                    this.renderExperiments(this.experiments);
+                                    
+                                    // Stop polling if completed
+                                    if (exp.status === 'completed' || exp.status === 'failed') {
+                                        clearInterval(pollInterval);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error polling experiment progress:', error);
+                    }
+                }, 2000); // Poll every 2 seconds
+            }
+
+            downloadExperiment(experimentId) {
+                window.open(`${this.apiBaseUrl}/experiments/${experimentId}/download`, '_blank');
+            }
+
+            viewExperiment(experimentId) {
+                alert(`Viewing experiment details: ${experimentId}`);
+            }
+        }
+
+        // Global functions for button clicks
+        function startModelMerge() {
+            if (window.modelTrainingStudio) {
+                window.modelTrainingStudio.startModelMerge();
+            }
+        }
+
+        function closeModelTrainingStudio() {
+            // Notify parent window to close the iframe
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ action: 'closeModelTrainingStudio' }, '*');
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            window.modelTrainingStudio = new ModelTrainingStudio();
+        });
+    </script>
+</body>
+</html>
